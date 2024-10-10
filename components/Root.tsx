@@ -1,19 +1,13 @@
 "use client";
 
 import { type PropsWithChildren } from "react";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { useLaunchParams, expandViewport } from "@telegram-apps/sdk-react";
 import { useTelegramMock } from "@/hooks/useTelegramMock";
 import { useDidMount } from "@/hooks/useDidMount";
 
 function App(props: PropsWithChildren) {
-  const lp = useLaunchParams();
-
-  const isDarkTheme = lp.themeParams
-    ? lp.themeParams.bgColor === "#17212b"
-    : false;
-
-  console.log(lp);
-  console.log(isDarkTheme);
+  useLaunchParams();
+  expandViewport();
 
   return <div>{props.children}</div>;
 }
