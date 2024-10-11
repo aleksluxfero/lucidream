@@ -1,63 +1,37 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  backButton,
-  isBackButtonMounted,
-  useSignal,
-} from "@telegram-apps/sdk-react";
 import { useEffect } from "react";
+import { initBackButton } from "@telegram-apps/sdk";
 
 export default function Page() {
   const router = useRouter();
-  const isVisible = useSignal(backButton.isVisible);
+  const [backButton] = initBackButton();
 
   useEffect(() => {
-    // Проверяем поддержку кнопки
-    if (!backButton.isSupported()) {
-      console.log(
-        "Back button is not supported in this version of Telegram Mini Apps",
-      );
-      return;
-    }
+    // Показать кнопку "Назад"
+    backButton.show();
+    console.log("Кнопка сейчас видима:", backButton.isVisible);
 
-    // Монтируем кнопку, если она ещё не была смонтирована
-    if (!isBackButtonMounted()) {
-      console.log("Монтируем кнопку назад");
-      backButton.mount();
-    }
-
-    console.log("mounted", isBackButtonMounted());
-
+    // Добавляем обработчик клика на кнопку "Назад"
     const handleButtonClick = () => {
       console.log("Back button clicked");
       router.push("/");
     };
+    backButton.on("click", handleButtonClick);
 
-    // Подписываемся на событие клика
-    const offClick = backButton.onClick(handleButtonClick);
-
-    // Очищаем обработчик при размонтировании компонента
     return () => {
-      console.log("Снимаем обработчик и скрываем кнопку");
+      // Удаляем обработчик и скрываем кнопку при размонтировании
       backButton.hide();
-      offClick(); // Используем offClick для удаления обработчика
+      backButton.off("click", handleButtonClick);
     };
   }, [router]);
-
-  useEffect(() => {
-    // Отслеживаем изменение состояния видимости кнопки
-    if (!isVisible) {
-      console.log("Кнопка не видна, делаем её видимой");
-      backButton.show();
-    }
-    console.log("Кнопка сейчас", isVisible ? "видна" : "невидима");
-  }, [isVisible]);
 
   return (
     <div>
       <h1>Сны</h1>
       <Link href="/">На главную</Link>
+      {/* Кастомная кнопка назад, если встроенная не работает */}
       <button onClick={() => router.back()}>Назад</button>
     </div>
   );
