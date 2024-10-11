@@ -2,29 +2,39 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  isBackButtonMounted,
   mountBackButton,
   offBackButtonClick,
   onBackButtonClick,
   showBackButton,
 } from "@telegram-apps/sdk-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const [buttonMounted, setButtonMounted] = useState(false);
 
   useEffect(() => {
-    const handleBackButton = () => {
-      console.log("button click");
-      router.push("/");
-    };
     mountBackButton();
     showBackButton();
+    if (isBackButtonMounted()) {
+      setButtonMounted(true);
+    }
+  }, []);
 
-    onBackButtonClick(handleBackButton);
-    return () => {
-      offBackButtonClick(handleBackButton);
-    };
-  }, [router]);
+  useEffect(() => {
+    console.log("состояние маунтинга", buttonMounted);
+    if (buttonMounted) {
+      const handleBackButton = () => {
+        console.log("button click");
+        router.push("/");
+      };
+      onBackButtonClick(handleBackButton);
+      return () => {
+        offBackButtonClick(handleBackButton);
+      };
+    }
+  }, [buttonMounted, router]);
 
   return (
     <div>
