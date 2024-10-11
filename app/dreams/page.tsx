@@ -8,21 +8,22 @@ export default function Page() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleBackButton = (event: PopStateEvent) => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       // Если пользователь НЕ на главной странице
       if (pathname !== "/") {
-        event.preventDefault(); // Отменяем стандартное поведение
+        event.preventDefault(); // Отменяем стандартное поведение закрытия приложения
         router.push("/"); // Перенаправляем на главную страницу
+        return ""; // Отменяем закрытие для современных браузеров
       }
     };
 
     if (typeof window !== "undefined") {
-      window.addEventListener("popstate", handleBackButton);
+      window.addEventListener("beforeunload", handleBeforeUnload);
     }
 
     return () => {
       if (typeof window !== "undefined") {
-        window.removeEventListener("popstate", handleBackButton);
+        window.removeEventListener("beforeunload", handleBeforeUnload);
       }
     };
   }, [pathname, router]);
