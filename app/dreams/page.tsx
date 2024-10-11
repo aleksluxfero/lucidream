@@ -2,11 +2,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { initBackButton } from "@telegram-apps/sdk";
+import { useBackButton } from "@telegram-apps/sdk-react";
 
 export default function Page() {
   const router = useRouter();
-  const [backButton] = initBackButton();
+  const backButton = useBackButton();
 
   useEffect(() => {
     // Показать кнопку "Назад"
