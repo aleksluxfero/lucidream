@@ -38,9 +38,9 @@ export default function Page() {
     <div>
       <h1>Сны</h1>
       <Link href="/">На главную</Link>
-      <button
-        onClick={() => onBackButtonClick(() => console.log("Тест"))}
-      ></button>
+      <button onClick={() => onBackButtonClick(() => console.log("Тест"))}>
+        Я забыл
+      </button>
     </div>
   );
 }
