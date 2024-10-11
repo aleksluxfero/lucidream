@@ -14,6 +14,7 @@ export default function Page() {
       if (pathname !== "/") {
         router.push("/"); // Перенаправляем на главную страницу
       }
+      return false;
     };
 
     // Подписываемся на событие onBackButtonClick
