@@ -3,6 +3,7 @@
 import { type PropsWithChildren } from "react";
 import { useDidMount } from "@/hooks/useDidMount";
 import { useTelegramMock } from "@/hooks/useTelegramMock";
+import { expandViewport } from "@telegram-apps/sdk-react";
 
 function App(props: PropsWithChildren) {
   if (process.env.NODE_ENV === "development") {
@@ -10,6 +11,7 @@ function App(props: PropsWithChildren) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useTelegramMock();
   }
+  expandViewport();
   return <>{props.children}</>;
 }
 
