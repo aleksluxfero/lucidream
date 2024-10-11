@@ -1,11 +1,6 @@
 "use client";
 import Link from "next/link";
-import {
-  isBackButtonMounted,
-  mountBackButton,
-  offBackButtonClick,
-  onBackButtonClick,
-} from "@telegram-apps/sdk-react";
+import { backButton } from "@telegram-apps/sdk-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -14,28 +9,19 @@ export default function Page() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Монтируем кнопку "Назад", если она не монтирована
-    if (!isBackButtonMounted()) {
-      mountBackButton();
-    }
-
-    // Обработчик нажатия на кнопку "Назад"
-    const handleBackButton = () => {
-      // Проверяем, если пользователь не на главной странице
+    backButton.mount();
+    console.log(backButton.isSupported());
+    const handleButtonClick = () => {
       if (pathname !== "/") {
-        router.push("/"); // Перенаправляем на главную страницу
-        return false; // Отменяем стандартное поведение
+        console.log(pathname);
+        router.push("/");
+        return false;
       }
-      return true; // Если на главной, позволяем выполнить стандартное действие
     };
+    backButton.onClick(handleButtonClick);
 
-    // Подписываемся на событие нажатия кнопки "Назад"
-    const offClick = onBackButtonClick(handleBackButton);
-
-    // Очищаем подписку при размонтировании компонента
     return () => {
-      offClick();
-      offBackButtonClick(handleBackButton); // Отключаем обработчик
+      backButton.offClick(handleButtonClick);
     };
   }, [pathname, router]);
 
