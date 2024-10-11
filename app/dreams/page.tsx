@@ -6,14 +6,17 @@ import {
   showBackButton,
 } from "@telegram-apps/sdk-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Page() {
-  if (isBackButtonSupported()) {
-    mountBackButton();
-  }
-  if (isBackButtonMounted()) {
-    showBackButton();
-  }
+  useEffect(() => {
+    if (isBackButtonSupported()) {
+      mountBackButton();
+    }
+    if (isBackButtonMounted()) {
+      showBackButton();
+    }
+  }, []);
 
   return (
     <div>
