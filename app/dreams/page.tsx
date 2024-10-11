@@ -2,28 +2,38 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { backButton } from "@telegram-apps/sdk-react";
+import {
+  hideBackButton,
+  isBackButtonSupported,
+  mountBackButton,
+  offBackButtonClick,
+  onBackButtonClick,
+  showBackButton,
+  unmountBackButton,
+} from "@telegram-apps/sdk-react";
 
 export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    if (backButton.isSupported()) {
-      backButton.mount();
+    console.log("Заход");
+    if (isBackButtonSupported()) {
+      console.log("Кнопка поддерживается");
+      mountBackButton();
+      showBackButton();
 
-      // Показываем кнопку
-      backButton.show();
-
-      // Добавляем обработчик клика
-      const offClick = backButton.onClick(() => {
+      const handleBackButtonClick = () => {
         console.log("Back button clicked");
         // Логика при нажатии
-      });
+      };
 
-      // Убираем обработчик при размонтировании компонента
+      onBackButtonClick(handleBackButtonClick);
+
+      // Очищаем обработчики и демонтируем кнопку при размонтировании компонента
       return () => {
-        backButton.offClick(offClick);
-        backButton.unmount();
+        offBackButtonClick(handleBackButtonClick);
+        hideBackButton();
+        unmountBackButton();
       };
     }
   }, []);
