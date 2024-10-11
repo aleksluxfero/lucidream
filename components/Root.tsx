@@ -1,26 +1,16 @@
 "use client";
 
 import { type PropsWithChildren } from "react";
-import { useLaunchParams, expandViewport } from "@telegram-apps/sdk-react";
-import { useTelegramMock } from "@/hooks/useTelegramMock";
 import { useDidMount } from "@/hooks/useDidMount";
+import { useTelegramMock } from "@/hooks/useTelegramMock";
 
 function App(props: PropsWithChildren) {
-  useLaunchParams();
-  expandViewport();
-
-  return <div>{props.children}</div>;
-}
-
-function RootInner({ children }: PropsWithChildren) {
-  // Mock Telegram environment in development mode if needed.
   if (process.env.NODE_ENV === "development") {
     console.log("Devolopment");
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useTelegramMock();
   }
-
-  return <App>{children}</App>;
+  return <>{props.children}</>;
 }
 
 export function Root(props: PropsWithChildren) {
@@ -28,5 +18,5 @@ export function Root(props: PropsWithChildren) {
   // Rendering. That's why we are showing loader on the server side.
   const didMount = useDidMount();
 
-  return didMount ? <RootInner {...props} /> : <div>Loading</div>;
+  return didMount ? <App>{props.children}</App> : <div>Loading</div>;
 }
