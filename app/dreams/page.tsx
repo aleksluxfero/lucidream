@@ -10,10 +10,14 @@ import { useEffect } from "react";
 
 export default function Page() {
   useEffect(() => {
+    console.log(isBackButtonSupported());
     if (isBackButtonSupported()) {
+      console.log("Монтируем кнопку");
       mountBackButton();
     }
+    console.log(isBackButtonMounted());
     if (isBackButtonMounted()) {
+      console.log("Показываем кнопку");
       showBackButton();
     }
   }, []);
