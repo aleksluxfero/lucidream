@@ -1,13 +1,26 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { mountBackButton, showBackButton } from "@telegram-apps/sdk-react";
+import {
+  mountBackButton,
+  offBackButtonClick,
+  onBackButtonClick,
+  showBackButton,
+} from "@telegram-apps/sdk-react";
 
 export default function Page() {
   const router = useRouter();
 
+  const handleBackButton = () => {
+    console.log("button click");
+    router.push("/");
+  };
+
   mountBackButton();
   showBackButton();
+
+  onBackButtonClick(handleBackButton);
+  offBackButtonClick(handleBackButton);
 
   return (
     <div>
