@@ -7,20 +7,22 @@ import {
   onBackButtonClick,
   showBackButton,
 } from "@telegram-apps/sdk-react";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
 
-  const handleBackButton = () => {
-    console.log("button click");
-    router.push("/");
-  };
+  useEffect(() => {
+    const handleBackButton = () => {
+      console.log("button click");
+      router.push("/");
+    };
+    mountBackButton();
+    showBackButton();
 
-  mountBackButton();
-  showBackButton();
-
-  onBackButtonClick(handleBackButton);
-  offBackButtonClick(handleBackButton);
+    onBackButtonClick(handleBackButton);
+    offBackButtonClick(handleBackButton);
+  }, [router]);
 
   return (
     <div>
