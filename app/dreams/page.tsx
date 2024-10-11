@@ -14,25 +14,20 @@ export default function Page() {
 
   useEffect(() => {
     backButton.mount();
-    console.log(isBackButtonMounted());
-  }, []);
-
-  useEffect(() => {
     console.log("The button is", isVisible ? "visible" : "invisible");
-  }, [isVisible]);
-
-  useEffect(() => {
     backButton.show();
+    console.log("mounted", isBackButtonMounted());
     const handleButtonClick = () => {
       console.log("back button");
       router.push("/");
     };
     backButton.onClick(handleButtonClick);
     return () => {
+      console.log("Стираем");
       backButton.hide();
       backButton.offClick(handleButtonClick);
     };
-  }, [router]);
+  }, [isVisible, router]);
 
   return (
     <div>
