@@ -1,32 +1,29 @@
 "use client";
 import Link from "next/link";
-import { useEffect } from "react";
+import { onBackButtonClick } from "@telegram-apps/sdk-react";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    const handleBackButton = () => {
       // Если пользователь НЕ на главной странице
       if (pathname !== "/") {
-        event.preventDefault(); // Отменяем стандартное поведение закрытия приложения
         router.push("/"); // Перенаправляем на главную страницу
-        return ""; // Отменяем закрытие для современных браузеров
       }
     };
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("beforeunload", handleBeforeUnload);
-    }
+    // Подписываемся на событие onBackButtonClick
+    const unsubscribe = onBackButtonClick(handleBackButton);
 
+    // Очищаем подписку при размонтировании компонента
     return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-      }
+      unsubscribe();
     };
-  }, [pathname, router]);
+  }, [router, pathname]);
 
   return (
     <div>
