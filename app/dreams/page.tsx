@@ -13,21 +13,37 @@ export default function Page() {
   const isVisible = useSignal(backButton.isVisible);
 
   useEffect(() => {
-    backButton.mount();
-    console.log("The button is", isVisible ? "visible" : "invisible");
-    backButton.show();
+    // Монтируем кнопку, если она ещё не была смонтирована
+    if (!isBackButtonMounted()) {
+      console.log("Монтируем кнопку назад");
+      backButton.mount();
+    }
+
     console.log("mounted", isBackButtonMounted());
+
     const handleButtonClick = () => {
-      console.log("back button");
+      console.log("Back button clicked");
       router.push("/");
     };
+
+    // Подписываемся на событие клика
     backButton.onClick(handleButtonClick);
+
     return () => {
-      console.log("Стираем");
+      console.log("Снимаем обработчик и скрываем кнопку");
       backButton.hide();
       backButton.offClick(handleButtonClick);
     };
-  }, [isVisible, router]);
+  }, [router]);
+
+  useEffect(() => {
+    // Отслеживаем изменение состояния видимости кнопки
+    if (!isVisible) {
+      console.log("Кнопка не видна, делаем её видимой");
+      backButton.show();
+    }
+    console.log("Кнопка сейчас", isVisible ? "видна" : "невидима");
+  }, [isVisible]);
 
   return (
     <div>
