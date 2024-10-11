@@ -10,6 +10,7 @@ export default function Page() {
 
   useEffect(() => {
     backButton.mount();
+    backButton.show();
     console.log(backButton.isSupported());
     const handleButtonClick = () => {
       if (pathname !== "/") {
