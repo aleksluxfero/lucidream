@@ -9,16 +9,30 @@ export default function Page() {
   const isVisible = useSignal(backButton.isVisible);
 
   useEffect(() => {
+    backButton.mount();
+  }, []);
+
+  useEffect(() => {
     console.log("The button is", isVisible ? "visible" : "invisible");
   }, [isVisible]);
 
   useEffect(() => {
-    backButton.mount();
     backButton.show();
     return () => {
       backButton.hide();
     };
   }, []);
+
+  useEffect(() => {
+    const handleButtonClick = () => {
+      console.log("back button");
+      router.push("/");
+    };
+    backButton.onClick(handleButtonClick);
+    return () => {
+      backButton.offClick(handleButtonClick);
+    };
+  }, [isVisible, router]);
 
   return (
     <div>
