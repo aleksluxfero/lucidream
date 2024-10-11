@@ -13,6 +13,14 @@ export default function Page() {
   const isVisible = useSignal(backButton.isVisible);
 
   useEffect(() => {
+    // Проверяем поддержку кнопки
+    if (!backButton.isSupported()) {
+      console.log(
+        "Back button is not supported in this version of Telegram Mini Apps",
+      );
+      return;
+    }
+
     // Монтируем кнопку, если она ещё не была смонтирована
     if (!isBackButtonMounted()) {
       console.log("Монтируем кнопку назад");
@@ -27,12 +35,13 @@ export default function Page() {
     };
 
     // Подписываемся на событие клика
-    backButton.onClick(handleButtonClick);
+    const offClick = backButton.onClick(handleButtonClick);
 
+    // Очищаем обработчик при размонтировании компонента
     return () => {
       console.log("Снимаем обработчик и скрываем кнопку");
       backButton.hide();
-      backButton.offClick(handleButtonClick);
+      offClick(); // Используем offClick для удаления обработчика
     };
   }, [router]);
 
