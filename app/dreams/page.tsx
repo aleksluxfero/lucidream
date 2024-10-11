@@ -21,7 +21,9 @@ export default function Page() {
     showBackButton();
 
     onBackButtonClick(handleBackButton);
-    offBackButtonClick(handleBackButton);
+    return () => {
+      offBackButtonClick(handleBackButton);
+    };
   }, [router]);
 
   return (
