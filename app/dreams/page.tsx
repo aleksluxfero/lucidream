@@ -8,10 +8,24 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    backButton.show();
-    return () => {
-      backButton.hide();
-    };
+    if (backButton.isSupported()) {
+      backButton.mount();
+
+      // Показываем кнопку
+      backButton.show();
+
+      // Добавляем обработчик клика
+      const offClick = backButton.onClick(() => {
+        console.log("Back button clicked");
+        // Логика при нажатии
+      });
+
+      // Убираем обработчик при размонтировании компонента
+      return () => {
+        backButton.offClick(offClick);
+        backButton.unmount();
+      };
+    }
   }, []);
 
   return (
